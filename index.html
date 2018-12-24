@@ -5,16 +5,32 @@
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
+    <header>
+      <button id="enter">連線</button> <button id="leave">離線</button>
+    </header>
     <ul id="messages"></ul>
     <form action="">
-      <div>
-        <p class="nickname">暱稱：</p>
-        <input type="text" id="nickname" placeholder="請輸入暱稱" />
-      </div>
+      <div class="input_content">
+        <div class="nickname">
+          <p>暱稱：</p>
+          <input type="text" id="nickname" placeholder="請輸入暱稱" />
+        </div>
 
-      <input id="m" autocomplete="off" /><button>Send</button>
+        <div class="message">
+          <div class="input_message">
+            <p>訊息：</p>
+            <input
+              type="text"
+              id="m"
+              placeholder="請輸入訊息"
+              autocomplete="off"
+            />
+          </div>
+
+          <button id="send_message">送出</button>
+        </div>
+      </div>
     </form>
-    <button id="leave">離線</button>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="/static/client.js"></script>

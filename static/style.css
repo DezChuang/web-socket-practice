@@ -13,13 +13,38 @@ form {
   bottom: 0;
   width: 100%;
 }
-.nickname {
+header {
+  background: #000;
+  text-align: right;
+  padding: 10px 0;
+}
+header button {
+  width: 9%;
+  background: rgb(130, 224, 255);
+  border: none;
+  padding: 10px;
+}
+.input_content {
+  display: flex;
   color: white;
+}
+.nickname {
+  flex: 1;
+}
+.message {
+  flex: 4;
+  display: flex;
+}
+.input_message {
+  flex: 9;
+}
+#send_message {
+  flex: 1;
 }
 form input {
   border: 0;
   padding: 10px;
-  width: 90%;
+  width: 95%;
   margin-right: 0.5%;
 }
 form button {
