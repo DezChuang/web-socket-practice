@@ -18,8 +18,9 @@ var socket = io()
 // 使用者連上網址，廣播登入訊息
 const nickname = `${nicknameArr[Math.floor(12 * Math.random())]}`
 $('#nickname').val(nickname)
-socket.emit('enter', `${nickname}前來報到！`)
-window.scrollTo(0, document.body.scrollHeight)
+socket.emit('join', {
+  username: nickname
+})
 
 // 送出聊天訊息
 $('form').submit(function() {
@@ -28,21 +29,36 @@ $('form').submit(function() {
   return false
 })
 
-// 監聽聊天訊息
-socket.on('chat message', function(msg) {
-  $('#messages').append($('<li>').text(`${msg}`))
-  window.scrollTo(0, document.body.scrollHeight)
+// 點擊連線按鈕
+$('#enter').on('click', function() {
+  socket.open()
+  $('#nickname').val(nickname)
+  socket.emit('join', {
+    username: nickname
+  })
+  $('#messages').append($('<li>').text(`你已成功連線！`))
 })
 
 // 點擊離線按鈕
 $('#leave').on('click', function() {
-  socket.emit('leave', $('#nickname').val())
   socket.close()
-  $('#messages').append($('<li>').text(`${nickname}已成功離線！`))
+  $('#messages').append($('<li>').text(`你已成功離線！`))
+})
+
+// 監聽連線訊息
+socket.on('broadcast_join', function(data) {
+  $('#messages').append($('<li>').text(`${data.username} 前來報到！`))
+  window.scrollTo(0, document.body.scrollHeight)
 })
 
 // 監聽離線訊息
-socket.on('leave', function(nickname) {
-  $('#messages').append($('<li>').text(`${nickname}已隨風飄逝！`))
+socket.on('broadcast_quit', function(data) {
+  $('#messages').append($('<li>').text(`${data.username} 已隨風飄逝！`))
+  window.scrollTo(0, document.body.scrollHeight)
+})
+
+// 監聽聊天訊息
+socket.on('chat message', function(msg) {
+  $('#messages').append($('<li>').text(`${msg}`))
   window.scrollTo(0, document.body.scrollHeight)
 })

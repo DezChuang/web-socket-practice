@@ -9,19 +9,29 @@ app.get('/', function(req, res) {
 })
 app.use('/static', express.static(__dirname + '/static'))
 
+let connectionList = []
+
 io.on('connection', function(socket) {
-  socket.on('enter', function(msg) {
-    io.emit('chat message', msg)
+  const socketId = socket.id
+  connectionList[socketId] = {
+    socket: socket
+  }
+  socket.on('join', function(data) {
+    io.emit('broadcast_join', data)
+    connectionList[socketId].username = data.username
   })
+  socket.on('disconnect', function() {
+    if (connectionList[socketId].username) {
+      io.emit('broadcast_quit', {
+        username: connectionList[socketId].username
+      })
+    }
+    delete connectionList[socketId]
+  })
+
   socket.on('chat message', function(msg) {
     io.emit('chat message', msg)
   })
-  socket.on('leave', function(nickname) {
-    io.emit('leave', nickname)
-  })
-  // socket.on('disconnect', function() {
-  //   io.emit('leave', nickname)
-  // })
 })
 
 http.listen(port, function() {
