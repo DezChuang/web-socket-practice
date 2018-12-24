@@ -25,15 +25,18 @@ app.get('/', function(req, res) {
 app.use('/static', express.static(__dirname + '/static'))
 
 io.on('connection', function(socket) {
-  console.log('a user connected')
-  const nickname = `${nicknameArr[Math.floor(12 * Math.random())]}`
-  io.emit('enter', nickname)
+  socket.on('enter', function(msg) {
+    io.emit('chat message', msg)
+  })
   socket.on('chat message', function(msg) {
     io.emit('chat message', msg)
   })
-  socket.on('disconnect', function() {
-    io.emit('leave')
+  socket.on('leave', function(nickname) {
+    io.emit('leave', nickname)
   })
+  // socket.on('disconnect', function() {
+  //   io.emit('leave', nickname)
+  // })
 })
 
 http.listen(port, function() {
