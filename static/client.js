@@ -47,12 +47,14 @@ $('#leave').on('click', function() {
 
 // 監聽連線訊息
 socket.on('broadcast_join', function(data) {
+  $('#user_count').text(`在線人數：${data.userCount} 人`)
   $('#messages').append($('<li>').text(`${data.username} 前來報到！`))
   window.scrollTo(0, document.body.scrollHeight)
 })
 
 // 監聽離線訊息
 socket.on('broadcast_quit', function(data) {
+  $('#user_count').text(`在線人數：${data.userCount} 人`)
   $('#messages').append($('<li>').text(`${data.username} 已隨風飄逝！`))
   window.scrollTo(0, document.body.scrollHeight)
 })

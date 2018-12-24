@@ -9,7 +9,7 @@ app.get('/', function(req, res) {
 })
 app.use('/static', express.static(__dirname + '/static'))
 
-let connectionList = []
+let connectionList = {}
 
 io.on('connection', function(socket) {
   const socketId = socket.id
@@ -17,12 +17,14 @@ io.on('connection', function(socket) {
     socket: socket
   }
   socket.on('join', function(data) {
+    data.userCount = Object.keys(connectionList).length
     io.emit('broadcast_join', data)
     connectionList[socketId].username = data.username
   })
   socket.on('disconnect', function() {
     if (connectionList[socketId].username) {
       io.emit('broadcast_quit', {
+        userCount: Object.keys(connectionList).length - 1,
         username: connectionList[socketId].username
       })
     }
